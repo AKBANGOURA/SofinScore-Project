@@ -2,7 +2,7 @@ Markdown
 
 # 🚀 SofinScore - Moteur de Scoring Crédit End-to-End
 
-Ce projet présente une solution complète de **Credit Scoring** développée pour simuler les problématiques d'octroi de crédit chez **Sofinco**. L'objectif est de fournir une évaluation en temps réel du risque de défaut client en s'appuyant sur des modèles de Machine Learning.
+Ce projet présente une solution complète de **Credit Scoring** développée pour simuler les problématiques d'octroi de crédit chez **Sofinco**. L'objectif est de fournir une évaluation en temps réel du risque de défaut client en s'appuyant sur des modèles de Machine Learning. Le lien https://sofinscore-project-datascientist.streamlit.app/
 
 ## 🎯 Objectifs du Projet
 * **Industrialisation** : Passage d'un modèle statistique à une application interactive.
@@ -50,4 +50,5 @@ Docker : Conteneurisation pour un déploiement robuste sur Kubernetes.
 
 
 Projet réalisé par Almamy Kalla BANGOURA dans le cadre d'une candidature pour le poste de Data Scientist.
+
 
