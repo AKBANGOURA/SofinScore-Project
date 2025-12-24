@@ -46,4 +46,5 @@ MLflow : Tracking des versions du modèle et monitoring du "Data Drift".
 
 Docker : Conteneurisation pour un déploiement robuste sur Kubernetes.
 
-Projet réalisé par [Ton Prénom/Nom] dans le cadre d'une candidature pour le poste de Data Scientist chez Sofinco.
+
+Projet réalisé par Almamy Kalla BANGOURA dans le cadre d'une candidature pour le poste de Data Scientist.
