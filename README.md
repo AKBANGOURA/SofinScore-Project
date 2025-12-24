@@ -37,6 +37,8 @@ Lancer l'application :
 Bash
 
 streamlit run app_streamlit.py
+
+
 📈 Évolutions Futures (MLOps)
 Pour répondre pleinement aux exigences de l'offre (Octroi & Scores) :
 
@@ -48,3 +50,4 @@ Docker : Conteneurisation pour un déploiement robuste sur Kubernetes.
 
 
 Projet réalisé par Almamy Kalla BANGOURA dans le cadre d'une candidature pour le poste de Data Scientist.
+
