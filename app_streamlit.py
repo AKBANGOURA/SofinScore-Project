@@ -12,8 +12,7 @@ st.set_page_config(
 )
 
 # --- CHARGEMENT DU MODÈLE ET DU SCALER ---
-# Ces fichiers doivent être dans un dossier nommé 'models' sur ton GitHub
-@st.cache_resource # Pour charger le modèle une seule fois et gagner en rapidité
+@st.cache_resource 
 def load_assets():
     model = joblib.load("models/credit_model.pkl")
     scaler = joblib.load("models/scaler.pkl")
@@ -48,25 +47,24 @@ historique = st.sidebar.selectbox(
     format_func=lambda x: "Bon (Pas de défaut)" if x == 1 else "Mauvais (Défauts passés)"
 )
 
+# --- AJOUT : SECTION AUTEUR DANS LA BARRE LATÉRALE ---
+st.sidebar.divider()
+st.sidebar.header("🎓 À propos de l'auteur")
+st.sidebar.write("**Auteur :** Almamy Kalla BANGOURA")
+st.sidebar.write("**Expertise :** Consultant Data | Chargé d'études statistiques")
+
 # --- LOGIQUE DE PRÉDICTION ---
-# Le bouton déclenche le calcul
 if st.sidebar.button("Évaluer le Dossier"):
-    # 1. Feature Engineering (Ratio d'endettement)
+    # 1. Feature Engineering
     ratio_dette = montant / (revenu * 12)
     
-    # 2. Préparation des données (Doit correspondre exactement à l'entraînement)
-    # Features : revenu_mensuel, age, montant_pret, historique_credit, ratio_dette
+    # 2. Préparation des données
     features = np.array([[revenu, age, montant, historique, ratio_dette]])
     
     # 3. Normalisation et Prédiction
     features_scaled = scaler.transform(features)
     probability = model.predict_proba(features_scaled)[0][1]
     score_fiabilite = round(float(1 - probability) * 100, 1)
-
-    # 4. DESCRIPTION DE L'AUTEUR EN DESSOUS
-st.sidebar.header("🎓 À propos de l'auteur")
-st.sidebar.write("**Auteur :** Almamy Kalla BANGOURA")
-st.sidebar.write("**Expertise :** Consultant Data | Chargé d'études statistiques")
 
     # --- AFFICHAGE DES RÉSULTATS ---
     st.subheader("🎯 Résultat de l'Analyse")
@@ -88,7 +86,6 @@ st.sidebar.write("**Expertise :** Consultant Data | Chargé d'études statistiqu
         else:
             st.error("DÉCISION : REFUSÉ")
 
-    # Petit conseil pédagogique pour le recruteur
     st.info(f"Note technique : Ce score est calculé en temps réel via le modèle Random Forest stocké dans `/models`.")
 
 else:
@@ -101,7 +98,6 @@ st.subheader("📊 Aperçu Statistique du Portefeuille")
 col_a, col_b = st.columns(2)
 
 with col_a:
-    # Simulation d'un graphique de distribution des scores
     chart_data = pd.DataFrame(
         np.random.normal(70, 15, size=1000),
         columns=['Distribution des Scores']
@@ -109,10 +105,8 @@ with col_a:
     st.area_chart(chart_data)
 
 with col_b:
-    # Répartition des décisions
     data_sim = pd.DataFrame({
         'Catégorie': ['Approuvés', 'Revue Manuelle', 'Refusés'],
         'Volume': [750, 150, 100]
     })
-
     st.bar_chart(data=data_sim, x='Catégorie', y='Volume')
