@@ -2,7 +2,6 @@ import streamlit as st
 import joblib
 import numpy as np
 import pandas as pd
-import os
 
 # --- CONFIGURATION DE LA PAGE ---
 st.set_page_config(
@@ -14,6 +13,7 @@ st.set_page_config(
 # --- CHARGEMENT DU MODÈLE ET DU SCALER ---
 @st.cache_resource 
 def load_assets():
+    # Charge les fichiers depuis le dossier 'models' sur GitHub
     model = joblib.load("models/credit_model.pkl")
     scaler = joblib.load("models/scaler.pkl")
     return model, scaler
@@ -47,10 +47,10 @@ historique = st.sidebar.selectbox(
     format_func=lambda x: "Bon (Pas de défaut)" if x == 1 else "Mauvais (Défauts passés)"
 )
 
-# --- BOUTON D'ACTION (PLACÉ AVANT L'AUTEUR) ---
+# --- BOUTON D'ACTION ---
 predict_btn = st.sidebar.button("Évaluer le Dossier")
 
-# --- SECTION AUTEUR (PLACÉE TOUT EN BAS) ---
+# --- SECTION AUTEUR (TOUT EN BAS DE LA SIDEBAR) ---
 st.sidebar.divider()
 st.sidebar.header("🎓 À propos de l'auteur")
 st.sidebar.write("**Auteur :** Almamy Kalla BANGOURA")
@@ -58,10 +58,51 @@ st.sidebar.write("**Expertise :** Consultant Data | Chargé d'études statistiqu
 
 # --- LOGIQUE DE PRÉDICTION ---
 if predict_btn:
-    # 1. Feature Engineering
+    # Feature Engineering : calcul du ratio d'endettement
     ratio_dette = montant / (revenu * 12)
-    
-    # 2. Préparation des données
     features = np.array([[revenu, age, montant, historique, ratio_dette]])
     
-    #
+    # Normalisation et Prédiction
+    features_scaled = scaler.transform(features)
+    probability = model.predict_proba(features_scaled)[0][1]
+    score_fiabilite = round(float(1 - probability) * 100, 1)
+
+    # --- AFFICHAGE DES RÉSULTATS ---
+    st.subheader("🎯 Résultat de l'Analyse")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric(label="Score de Fiabilité", value=f"{score_fiabilite}/100")
+    with col2:
+        st.write(f"**Probabilité de défaut :** {round(probability * 100, 2)}%")
+    with col3:
+        if probability < 0.35:
+            st.success("DÉCISION : APPROUVÉ")
+        elif probability < 0.60:
+            st.warning("DÉCISION : REVUE MANUELLE")
+        else:
+            st.error("DÉCISION : REFUSÉ")
+else:
+    st.info("Utilisez le panneau de gauche pour remplir les données du client et cliquez sur 'Évaluer le Dossier'.")
+
+# --- GRAPHIQUES DE DÉMONSTRATION (SORTIS DU BLOC ELSE POUR ÊTRE TOUJOURS VISIBLES) ---
+st.divider()
+st.subheader("📊 Analyse du Portefeuille (Données simulées)")
+
+col_a, col_b = st.columns(2)
+
+with col_a:
+    # Distribution des scores de fiabilité
+    chart_data = pd.DataFrame(
+        np.random.normal(70, 15, size=1000),
+        columns=['Distribution des Scores']
+    )
+    st.area_chart(chart_data)
+
+with col_b:
+    # Répartition des décisions d'octroi
+    data_sim = pd.DataFrame({
+        'Catégorie': ['Approuvés', 'Revue Manuelle', 'Refusés'],
+        'Volume': [750, 150, 100]
+    })
+    st.bar_chart(data=data_sim, x='Catégorie', y='Volume')
