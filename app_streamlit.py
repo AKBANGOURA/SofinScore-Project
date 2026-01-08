@@ -25,7 +25,7 @@ except Exception as e:
     st.stop()
 
 # --- INTERFACE UTILISATEUR ---
-st.title("🚀 SofinScore : Outil d'Aide à la Décision Crédit")
+st.title("🚀 SofinScore : Outil d'Aide à la Décision")
 st.markdown("""
 Cette interface simule l'outil utilisé par les conseillers **Sofinco** pour évaluer un risque de crédit en temps réel.
 * **Modèle :** Random Forest (Scoring de risque)
@@ -110,3 +110,4 @@ with col_b:
         'Volume': [750, 150, 100]
     })
     st.bar_chart(data=data_sim, x='Catégorie', y='Volume')
+
