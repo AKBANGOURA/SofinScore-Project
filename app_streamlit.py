@@ -63,6 +63,11 @@ if st.sidebar.button("Évaluer le Dossier"):
     probability = model.predict_proba(features_scaled)[0][1]
     score_fiabilite = round(float(1 - probability) * 100, 1)
 
+    # 4. DESCRIPTION DE L'AUTEUR EN DESSOUS
+st.sidebar.header("🎓 À propos de l'auteur")
+st.sidebar.write("**Auteur :** Almamy Kalla BANGOURA")
+st.sidebar.write("**Expertise :** Consultant Data | Chargé d'études statistiques")
+
     # --- AFFICHAGE DES RÉSULTATS ---
     st.subheader("🎯 Résultat de l'Analyse")
     
@@ -109,4 +114,5 @@ with col_b:
         'Catégorie': ['Approuvés', 'Revue Manuelle', 'Refusés'],
         'Volume': [750, 150, 100]
     })
+
     st.bar_chart(data=data_sim, x='Catégorie', y='Volume')
